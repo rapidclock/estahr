@@ -1,5 +1,3 @@
-use std::cmp::min;
-
 fn levenshtein_distance<A: PartialOrd>(it_a: &mut dyn Iterator<Item=A>, it_b: &mut dyn Iterator<Item=A>) -> usize {
     let vec_a: Vec<_> = it_a.collect();
     let vec_b: Vec<_> = it_b.collect();
@@ -17,7 +15,7 @@ fn levenshtein_distance<A: PartialOrd>(it_a: &mut dyn Iterator<Item=A>, it_b: &m
 }
 
 fn levenshtein<A: PartialOrd>(vec_a: Vec<A>, vec_b: Vec<A>) -> usize {
-    let (mut left, mut top, mut across) = (0, 0, 0);
+    let (mut left, mut top, mut across);
     let (m, n) = (vec_a.len(), vec_b.len());
     let mut cache: Vec<usize> = Vec::with_capacity(m);
     (0..m).for_each(|i| cache.push(i + 1));
@@ -41,7 +39,7 @@ fn levenshtein<A: PartialOrd>(vec_a: Vec<A>, vec_b: Vec<A>) -> usize {
 fn min_3(a: usize, b: usize, c: usize) -> usize {
     if (a < b) && (a < c) {
         a
-    } else if (b < c) {
+    } else if b < c {
         b
     } else {
         c
