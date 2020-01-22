@@ -21,12 +21,12 @@ fn levenshtein<A: PartialOrd>(vec_a: Vec<A>, vec_b: Vec<A>) -> usize {
     let (m, n) = (vec_a.len(), vec_b.len());
     let mut cache: Vec<usize> = Vec::with_capacity(m);
     (0..m).for_each(|i| cache.push(i + 1));
-    for i in 0..n {
+    for (i, item_b) in vec_b.iter().enumerate() {
         left = i + 1;
         across = left - 1;
-        for j in 0..m {
+        for (j, item_a) in vec_a.iter().enumerate() {
             top = cache[j];
-            if vec_a[j].eq(&vec_b[i]) {
+            if item_a.eq(item_b) {
                 cache[j] = across;
             } else {
                 cache[j] = min_3(left, across, top) + 1;
