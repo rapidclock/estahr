@@ -1,5 +1,5 @@
 pub use hash::{hash_file, hash_string, HashAlgorithm};
-pub use strings::{hamming_ascii, hamming_bytes, levenshtein_ascii, levenshtein_bytes};
+pub use strings::{hamming_ascii, hamming_bytes, levenshtein_ascii, levenshtein_bytes, jaro_winkler_ascii, jaro_winkler_bytes};
 
 mod strings;
 mod hash;
@@ -65,6 +65,36 @@ mod tests {
         assert_eq!(levenshtein_bytes(b"bullfrog", b"frogger"), 7);
     }
 
+    #[test]
+    fn jaro_winkler_ascii_test() {
+        assert_eq!(jaro_winkler_ascii("cats", "casts"), 0.12);
+        assert_eq!(jaro_winkler_ascii("cats", "priu"), 1.0);
+        assert_eq!(jaro_winkler_ascii("cats", "prius"), 0.52);
+        assert_eq!(jaro_winkler_ascii("", "prius"), 1.0);
+        assert_eq!(jaro_winkler_ascii("cats", ""), 1.0);
+        assert_eq!(jaro_winkler_ascii("", ""), 0.0);
+        assert_eq!(jaro_winkler_ascii("cats", "cats"), 0.0);
+        assert_eq!(jaro_winkler_ascii("java", "javascript"), 0.12);
+        assert_eq!(jaro_winkler_ascii("attaca", "tataa"), 0.12);
+        assert_eq!(jaro_winkler_ascii("gattaca", "tataa"), 0.16);
+        assert_eq!(jaro_winkler_ascii("tataa", "gattaca"), 0.16);
+    }
+
+    #[test]
+    fn jaro_winkler_bytes_test() {
+        assert_eq!(jaro_winkler_bytes(b"cats", b"casts"), 0.12);
+        assert_eq!(jaro_winkler_bytes(b"cats", b"priu"), 1.0);
+        assert_eq!(jaro_winkler_bytes(b"cats", b"prius"), 0.52);
+        assert_eq!(jaro_winkler_bytes(b"", b"prius"), 1.0);
+        assert_eq!(jaro_winkler_bytes(b"cats", b""), 1.0);
+        assert_eq!(jaro_winkler_bytes(b"", b""), 0.0);
+        assert_eq!(jaro_winkler_bytes(b"cats", b"cats"), 0.0);
+        assert_eq!(jaro_winkler_bytes(b"java", b"javascript"), 0.12);
+        assert_eq!(jaro_winkler_bytes(b"attaca", b"tataa"), 0.12);
+        assert_eq!(jaro_winkler_bytes(b"gattaca", b"tataa"), 0.16);
+        assert_eq!(jaro_winkler_bytes(b"tataa", b"gattaca"), 0.16);
+    }
+
     struct HashTestStrings<'a> {
         ex1: &'a str,
         ex2: &'a str,
@@ -105,9 +135,6 @@ mod tests {
     }
 
     #[test]
-    fn test_md5_hash_file() {}
-
-    #[test]
     fn test_sha256_hash_string() {
         let examples = HashTestStrings::new();
         let expected_hash_ex1 = "b2c977fed8cf70d15d864ef9c96708ded13bde4ab0cdf03dac42678f06dab5d4";
@@ -122,9 +149,6 @@ mod tests {
         assert_eq!(hash_string(HashAlgorithm::SHA2_256, examples.ex4, true), expected_hash_ex4);
         assert_eq!(hash_string(HashAlgorithm::SHA2_256, examples.ex5, true), expected_hash_ex5);
     }
-
-    #[test]
-    fn test_sha256_hash_file() {}
 
     #[test]
     fn test_sha512_hash_string() {
@@ -143,9 +167,6 @@ mod tests {
     }
 
     #[test]
-    fn test_sha512_hash_file() {}
-
-    #[test]
     fn test_sha3_256_hash_string() {
         let examples = HashTestStrings::new();
         let expected_hash_ex1 = "f6817ac5b66bf4123220ba5c6b1a3d2590df986a53fdd1d6cc6a6d9632b602ae";
@@ -160,9 +181,6 @@ mod tests {
         assert_eq!(hash_string(HashAlgorithm::SHA3_256, examples.ex4, true), expected_hash_ex4);
         assert_eq!(hash_string(HashAlgorithm::SHA3_256, examples.ex5, true), expected_hash_ex5);
     }
-
-    #[test]
-    fn test_sha3_256_hash_file() {}
 
     #[test]
     fn test_sha3_512_hash_string() {
@@ -181,9 +199,6 @@ mod tests {
     }
 
     #[test]
-    fn test_sha3_512_hash_file() {}
-
-    #[test]
     fn test_blake2s_hash_string() {
         let examples = HashTestStrings::new();
         let expected_hash_ex1 = "22e018773b2d2d5ce503b8daeaef527eca344084d02dde08bdd7dcfbe39346ce";
@@ -198,9 +213,6 @@ mod tests {
         assert_eq!(hash_string(HashAlgorithm::BLAKE2S, examples.ex4, true), expected_hash_ex4);
         assert_eq!(hash_string(HashAlgorithm::BLAKE2S, examples.ex5, true), expected_hash_ex5);
     }
-
-    #[test]
-    fn test_blake2s_hash_file() {}
 
     #[test]
     fn test_blake2b_hash_string() {
@@ -219,5 +231,18 @@ mod tests {
     }
 
     #[test]
-    fn test_blake2b_hash_file() {}
+    fn test_blake3_hash_string() {
+        let examples = HashTestStrings::new();
+        let expected_hash_ex1 = "664befd4e886e526287bd5e0d6a0cca5db904c6a4bad21017511325ba7d404f5";
+        let expected_hash_ex2 = "e76980f6b3cf168e48700ac616f9080f06dfe8a9b2f0227138ad524b4cc9a5f4";
+        let expected_hash_ex3 = "17762fddd969a453925d65717ac3eea21320b66b54342fde15128d6caf21215f";
+        let expected_hash_ex4 = "32684bfa28c0c84d6f210511aace0efc5171c7889148ba89208d5aa29705fa98";
+        let expected_hash_ex5 = "31fe46b899e13ed5a11d1196797af433003c4b8495f194db60813ad871154fe6";
+
+        assert_eq!(hash_string(HashAlgorithm::BLAKE3, examples.ex1, true), expected_hash_ex1);
+        assert_eq!(hash_string(HashAlgorithm::BLAKE3, examples.ex2, true), expected_hash_ex2);
+        assert_eq!(hash_string(HashAlgorithm::BLAKE3, examples.ex3, true), expected_hash_ex3);
+        assert_eq!(hash_string(HashAlgorithm::BLAKE3, examples.ex4, true), expected_hash_ex4);
+        assert_eq!(hash_string(HashAlgorithm::BLAKE3, examples.ex5, true), expected_hash_ex5);
+    }
 }
