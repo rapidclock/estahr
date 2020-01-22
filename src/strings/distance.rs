@@ -35,7 +35,7 @@ fn levenshtein<A: PartialOrd>(vec_a: Vec<A>, vec_b: Vec<A>) -> usize {
             left = cache[j];
         }
     }
-    return cache[m - 1];
+    cache[m - 1]
 }
 
 fn min_3(a: usize, b: usize, c: usize) -> usize {
@@ -74,14 +74,14 @@ pub fn hamming_bytes(bytes_a: &[u8], bytes_b: &[u8]) -> usize {
 
 fn hamming_distance<A: PartialOrd>(it_a: &mut dyn Iterator<Item=A>, it_b: &mut dyn Iterator<Item=A>) -> usize {
     let mut distance: usize = 0;
-    while let Some(item_a) = it_a.next() {
+    for item_a in it_a {
         if let Some(item_b) = it_b.next() {
             if item_a.ne(&item_b) {
                 distance += 1;
             }
         }
     }
-    while let Some(_) = it_b.next() {
+    for _ in it_b {
         distance += 1;
     }
     distance
@@ -90,11 +90,11 @@ fn hamming_distance<A: PartialOrd>(it_a: &mut dyn Iterator<Item=A>, it_b: &mut d
 pub fn jaro_winkler_ascii(str_a: &str, str_b: &str) -> f64 {
     let vec_a = str_a.chars().collect::<Vec<char>>();
     let vec_b = str_b.chars().collect::<Vec<char>>();
-    return jaro_winkler_distance(&vec_a, &vec_b);
+    jaro_winkler_distance(&vec_a, &vec_b)
 }
 
 pub fn jaro_winkler_bytes(bytes_a: &[u8], bytes_b: &[u8]) -> f64 {
-    return jaro_winkler_distance(bytes_a, bytes_b);
+    jaro_winkler_distance(bytes_a, bytes_b)
 }
 
 fn jaro_winkler_distance<A: PartialEq>(it_a: &[A], it_b: &[A]) -> f64 {
@@ -166,7 +166,7 @@ fn jaro_winkler_distance<A: PartialEq>(it_a: &[A], it_b: &[A]) -> f64 {
 
     let jaro_winkler_number = jaro_number + (pref_len as f64 * 0.1 * (1.0 - jaro_number));
 
-    return round_two_digits(1.0 - jaro_winkler_number);
+    round_two_digits(1.0 - jaro_winkler_number)
 }
 
 fn round_two_digits(num: f64) -> f64 {
