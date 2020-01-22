@@ -18,7 +18,7 @@ fn levenshtein_distance<A: PartialOrd>(it_a: &mut dyn Iterator<Item=A>, it_b: &m
 
 fn levenshtein<A: PartialOrd>(vec_a: Vec<A>, vec_b: Vec<A>) -> usize {
     let (mut left, mut top, mut across);
-    let (m, n) = (vec_a.len(), vec_b.len());
+    let m= vec_a.len();
     let mut cache: Vec<usize> = Vec::with_capacity(m);
     (0..m).for_each(|i| cache.push(i + 1));
     for (i, item_b) in vec_b.iter().enumerate() {
