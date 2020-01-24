@@ -1,5 +1,6 @@
 [package]
 name = "estahr"
+description = "A string distance and hashing library."
 version = "0.1.0"
 authors = ["Rahul Thomas <rapidclock@users.noreply.github.com>"]
 edition = "2018"
