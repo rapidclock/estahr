@@ -1,3 +1,18 @@
+//! This module provides functions to calculate the hash of strings and files.
+//! The hashes can be in absolute value or in hex. (hex is usually preferred)
+//!
+//!
+//!
+//! The hashing (file & string) provided include:
+//! 1. MD5 (for compatibility, not recommended due to proven weaknesses).
+//! 2. SHA2 - 256
+//! 3. SHA2 - 512
+//! 4. SHA3 - 256
+//! 5. SHA3 - 512
+//! 6. BLAKE 2s (256 bit)
+//! 7. BLAKE 2b (512 bit)
+//! 8. BLAKE 3 (256 bit)
+
 extern crate blake2;
 extern crate blake3;
 extern crate digest;
@@ -14,6 +29,11 @@ use md5::Md5;
 use sha2::{Sha256, Sha512};
 use sha3::{Sha3_256, Sha3_512};
 
+/// This represents the type of hash algorithm.
+///
+/// Ideally you should only use this to activate the type of hash required in this library,
+/// since matching on this type might cause your code to break if new hash types are
+/// included in newer versions of this library.
 #[derive(Debug)]
 pub enum HashAlgorithm {
     MD5,
@@ -46,8 +66,11 @@ fn blake3_bytes(input: &[u8], as_hex: bool) -> String {
     }
 }
 
-pub fn hash_string(algo: HashAlgorithm, input: &str, as_hex: bool) -> String {
-    match algo {
+/// Hashes the given string with the selected hash algorithm.
+///
+/// Option to get the output as hex if `as_hex` is true.
+pub fn hash_string(hash_algorithm: HashAlgorithm, input: &str, as_hex: bool) -> String {
+    match hash_algorithm {
         HashAlgorithm::MD5 => hash_bytes::<Md5>(input.as_bytes(), as_hex),
         HashAlgorithm::SHA2_256 => hash_bytes::<Sha256>(input.as_bytes(), as_hex),
         HashAlgorithm::SHA2_512 => hash_bytes::<Sha512>(input.as_bytes(), as_hex),
@@ -81,9 +104,14 @@ fn blake3_stream(mut stream: &mut dyn io::Read, as_hex: bool) -> Result<String, 
     }
 }
 
-pub fn hash_file(algo: HashAlgorithm, path: &str, as_hex: bool) -> Result<String, io::Error> {
+/// Hashes the given file with the selected hash algorithm.
+///
+/// Returns an `io::Error` if the file cannot be opened for any reason.
+///
+/// Option to get the output as hex if `as_hex` is true.
+pub fn hash_file(hash_algorithm: HashAlgorithm, path: &str, as_hex: bool) -> Result<String, io::Error> {
     let mut file = fs::File::open(path)?;
-    match algo {
+    match hash_algorithm {
         HashAlgorithm::MD5 => hash_stream::<Md5>(&mut file, as_hex),
         HashAlgorithm::SHA2_256 => hash_stream::<Sha256>(&mut file, as_hex),
         HashAlgorithm::SHA2_512 => hash_stream::<Sha512>(&mut file, as_hex),

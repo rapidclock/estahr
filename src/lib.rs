@@ -1,12 +1,40 @@
-pub use hash::{hash_file, hash_string, HashAlgorithm};
-pub use strings::{hamming_ascii, hamming_bytes, levenshtein_ascii, levenshtein_bytes, jaro_winkler_ascii, jaro_winkler_bytes};
-
-mod strings;
-mod hash;
+//! # estahr
+//! This crate contains some string based utilities.
+//!
+//! For the 0.1.x version, we include string distance and hashing functions. The hashing is
+//! provided by the [RustCrypto](https://github.com/RustCrypto/hashes) series of crates.
+//!
+//! The blake3 hashing is provided by the [blake3](https://crates.io/crates/blake3) crate,
+//! straight from the [Blake-3 Team](https://github.com/BLAKE3-team/BLAKE3).
+//!
+//! ## String Distances
+//! The string distances currently provided are:
+//! 1. Hamming Distance [Wiki](https://en.wikipedia.org/wiki/Hamming_distance)
+//! 2. Levenshtein Distance [Wiki](https://en.wikipedia.org/wiki/Levenshtein_distance)
+//! 3. Jaro Winkler Distance [Wiki](https://en.wikipedia.org/wiki/Jaro-Winkler_distance)
+//!
+//! ## Hashing
+//! This crate provides both string and file based hashing.
+//!
+//! The hashing (file & string) provided include:
+//! 1. MD5 (for compatibility, not recommended due to proven weaknesses).
+//! 2. SHA2 - 256
+//! 3. SHA2 - 512
+//! 4. SHA3 - 256
+//! 5. SHA3 - 512
+//! 6. BLAKE 2s (256 bit)
+//! 7. BLAKE 2b (512 bit)
+//! 8. BLAKE 3 (256 bit)
+//!
+//!
+pub mod strings;
+pub mod hash;
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use super::strings::*;
+    use super::hash::*;
 
     #[test]
     fn hamming_ascii_test() {

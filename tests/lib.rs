@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod ext_tests {
-    use estahr::*;
+    use estahr::hash::*;
+    use estahr::strings::*;
 
     const FILENAME_SMALL: &str = "small_600.txt";
     const FILENAME_LARGE: &str = "large_1800.txt";
