@@ -8,13 +8,10 @@ license = "MIT"
 repository = "https://github.com/rapidclock/estahr"
 documentation = "https://docs.rs/estahr"
 keywords = [
-	"strings",
-	"str",
-	"stringutils",
 	"string-utils",
 	"hashing",
 	"file-hashing",
-	"string-hashing",
+	"string-distance",
 	"distance"
 ]
 categories = ["algorithms", "cryptography"]
