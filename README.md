@@ -1,6 +1,10 @@
 # estahr
 String comparison and hashing library
 
+[![Crates.io](https://img.shields.io/crates/v/estahr.svg)](https://crates.io/crates/estahr)
+[![Docs.rs](https://docs.rs/estahr/badge.svg)](https://docs.rs/estahr)
+![](https://github.com/rapidclock/estahr/workflows/Rust/badge.svg)
+
 The word `estahr` is the phonetic version of str (ess-tee-ahr). :)
 
 For the 0.1.x version, we include string distance and hashing functions. The hashing is
