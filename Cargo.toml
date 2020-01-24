@@ -13,7 +13,7 @@ keywords = [
 	"string-utils",
 	"hashing",
 	"file-hashing",
-	"string hashing",
+	"string-hashing",
 	"distance"
 ]
 categories = ["algorithms", "cryptography"]
