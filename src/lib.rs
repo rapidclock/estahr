@@ -1,6 +1,8 @@
 //! # estahr
 //! This crate contains some string based utilities.
 //!
+//! The word `estahr` is the phonetic version of str (ess-tee-ahr). :)
+//!
 //! For the 0.1.x version, we include string distance and hashing functions. The hashing is
 //! provided by the [RustCrypto](https://github.com/RustCrypto/hashes) series of crates.
 //!
